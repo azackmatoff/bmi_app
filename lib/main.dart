@@ -20,12 +20,18 @@ class MyApp extends StatelessWidget {
           primary: AppColors.primary,
         ),
         textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            color: AppColors.white,
+            fontSize: 48,
+            fontWeight: FontWeight.w600,
+          ),
           bodyLarge: TextStyle(
             color: AppColors.white,
           ),
           titleLarge: TextStyle(
             color: AppColors.white,
             fontWeight: FontWeight.w500,
+            fontSize: 20,
           ),
           headlineMedium: TextStyle(
             color: AppColors.white,
