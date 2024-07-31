@@ -57,7 +57,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   Text(
                     assessBMICategory(bmiRezultati),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: AppColors.green,
+                          color: AppColors.yellow,
                         ),
                   ),
                   const SizedBox(height: 30),
