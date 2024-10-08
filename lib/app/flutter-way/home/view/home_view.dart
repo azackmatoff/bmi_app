@@ -1,33 +1,22 @@
-import 'dart:developer';
-
-import 'package:bmi_app/constants/app_colors.dart';
-import 'package:bmi_app/enums/app_enums.dart';
-import 'package:bmi_app/result_screen.dart';
-import 'package:bmi_app/widgets/custom_app_bar.dart';
-import 'package:bmi_app/widgets/custom_button.dart';
-import 'package:bmi_app/widgets/custom_icon_button.dart';
-import 'package:bmi_app/widgets/weight_and_age_widget.dart';
+import 'package:bmi_app/app/flutter-way/home/business_logic/home_view_biz_logic.dart';
+import 'package:bmi_app/app/flutter-way/result/view/result_view.dart';
+import 'package:bmi_app/shared/constants/app_colors.dart';
+import 'package:bmi_app/shared/enums/app_enums.dart';
+import 'package:bmi_app/shared/widgets/custom_app_bar.dart';
+import 'package:bmi_app/shared/widgets/custom_button.dart';
+import 'package:bmi_app/shared/widgets/custom_icon_button.dart';
+import 'package:bmi_app/shared/widgets/weight_and_age_widget.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  // int tandaldi = 0;
-
-  /// tandaldi == 0 => Jinis tandalgan jok
-  /// tandaldi == 1 => Erkek
-  /// tandaldi == 2 => Ayal
-
-  Jinis jinis = Jinis.tandalganJok;
-
-  double boy = 160;
-  int salmak = 50;
-  int jash = 18;
+class _HomeViewState extends State<HomeView> {
+  final _bizLogic = HomeViewBizLogic();
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomIconButton(
                   text: 'male',
                   icon: Icons.male,
-                  bgColor: jinis == Jinis.erkek ? AppColors.greyBlueDarker : AppColors.greyBlueDark,
-                  // bgColor: erkekTusunBer(),
+                  bgColor: _bizLogic.gender == Gender.male
+                      ? AppColors.greyBlueDarker
+                      : AppColors.greyBlueDark,
                   onTap: () {
                     setState(() {
-                      jinis = Jinis.erkek;
+                      _bizLogic.onGenderSelected(Gender.male);
                     });
                   },
                 ),
@@ -56,11 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomIconButton(
                   text: 'female',
                   icon: Icons.female,
-                  bgColor: jinis == Jinis.ayal ? AppColors.greyBlueDarker : AppColors.greyBlueDark,
-                  // bgColor: ayalTusunBer(),
+                  bgColor: _bizLogic.gender == Gender.female
+                      ? AppColors.greyBlueDarker
+                      : AppColors.greyBlueDark,
                   onTap: () {
                     setState(() {
-                      jinis = Jinis.ayal;
+                      _bizLogic.onGenderSelected(Gender.female);
                     });
                   },
                 ),
@@ -82,11 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.baseline, // Align to baseline
-                    textBaseline: TextBaseline.alphabetic, // Specify baseline type
+                    crossAxisAlignment:
+                        CrossAxisAlignment.baseline, // Align to baseline
+                    textBaseline:
+                        TextBaseline.alphabetic, // Specify baseline type
                     children: [
                       Text(
-                        boy.toInt().toString(),
+                        _bizLogic.height.toInt().toString(),
                         style: Theme.of(context).textTheme.headlineLarge,
                       ),
                       const SizedBox(width: 2), // Adjust spacing as needed
@@ -97,15 +90,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   Slider(
-                    value: boy,
+                    value: _bizLogic.height,
                     min: 50,
                     max: 210,
                     thumbColor: AppColors.pinkDark,
                     activeColor: AppColors.pinkDark,
-                    onChanged: (double ozgorgonSan) {
-                      log('ozgorgonSan $ozgorgonSan');
-                      boy = ozgorgonSan;
-                      log('sliderdinSani $boy');
+                    onChanged: (double value) {
+                      _bizLogic.onHeightChanged(value);
 
                       setState(() {});
                     },
@@ -119,18 +110,18 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Expanded(
                   child: WeightAndAgeWidget(
-                    koboytTag: salmak.toString(),
+                    koboytTag: _bizLogic.weight.toString(),
                     azaytTag: 'salmak',
-                    san: salmak.toString(),
+                    san: _bizLogic.weight.toString(),
                     aty: 'weigth',
                     koboyt: () {
                       setState(() {
-                        salmak++;
+                        _bizLogic.onWeightChanged(isIncrement: true);
                       });
                     },
                     azayt: () {
                       setState(() {
-                        salmak--;
+                        _bizLogic.onWeightChanged(isIncrement: false);
                       });
                     },
                   ),
@@ -138,18 +129,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: WeightAndAgeWidget(
-                    koboytTag: jash.toString(),
+                    koboytTag: _bizLogic.age.toString(),
                     azaytTag: 'jash',
-                    san: jash.toString(),
+                    san: _bizLogic.age.toString(),
                     aty: 'age',
                     koboyt: () {
                       setState(() {
-                        jash++;
+                        _bizLogic.onAgeChanged(isIncrement: true);
                       });
                     },
                     azayt: () {
                       setState(() {
-                        jash--;
+                        _bizLogic.onAgeChanged(isIncrement: false);
                       });
                     },
                   ),
@@ -163,38 +154,19 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return ResultScreen(
-                salmak: salmak,
-                boy: boy,
-                jash: jash.toString(),
-                jinis: jinis.name,
+              return ResultView(
+                weight: _bizLogic.weight,
+                height: _bizLogic.height,
+                reset: () {
+                  _bizLogic.reset();
+                  setState(() {});
+                },
               );
             },
           ));
         },
         buttonText: 'calculate',
-        // buttonTextStyle: TextStyle(fontSize: 42, color: Colors.white),
       ),
     );
   }
-
-  Color erkekTusunBer() {
-    if (jinis == Jinis.erkek) {
-      return AppColors.greyBlueDarker;
-    } else {
-      return AppColors.greyBlueDark;
-    }
-  }
-
-  Color ayalTusunBer() {
-    if (jinis == Jinis.ayal) {
-      return AppColors.greyBlueDarker;
-    } else {
-      return AppColors.greyBlueDark;
-    }
-  }
 }
-
-// refactor
-
-

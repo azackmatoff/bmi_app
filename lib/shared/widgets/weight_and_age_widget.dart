@@ -1,4 +1,4 @@
-import 'package:bmi_app/constants/app_colors.dart';
+import 'package:bmi_app/shared/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class WeightAndAgeWidget extends StatelessWidget {

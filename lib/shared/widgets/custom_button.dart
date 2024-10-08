@@ -1,4 +1,4 @@
-import 'package:bmi_app/constants/app_colors.dart';
+import 'package:bmi_app/shared/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -26,7 +26,8 @@ class CustomButton extends StatelessWidget {
           ),
           child: Text(
             buttonText.toUpperCase(),
-            style: buttonTextStyle ?? Theme.of(context).textTheme.headlineMedium!,
+            style:
+                buttonTextStyle ?? Theme.of(context).textTheme.headlineMedium!,
             // style: _getButtonTextStyle(context),
             textAlign: TextAlign.center,
           ),

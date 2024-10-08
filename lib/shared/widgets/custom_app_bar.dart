@@ -1,4 +1,4 @@
-import 'package:bmi_app/constants/app_colors.dart';
+import 'package:bmi_app/shared/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -15,7 +15,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 5,
       title: Text(
         title.toUpperCase(),
-        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(color: Colors.white),
       ),
       iconTheme: const IconThemeData(color: AppColors.white),
       centerTitle: true,
